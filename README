@@ -1,0 +1,70 @@
+avital.harel
+avital harel (211747381)
+EX: 1
+
+FILES:
+measure_latency.cpp -- a file with the implemented functions as requested in Q2
+Makefile
+results.png
+lscpu.png
+page_size.png
+README
+
+ANSWERS:
+
+Q1:
+The program perform the following :
+Creates a directory named "Welcome" with permissions 0775.
+Creates and opens three files within the "Welcome" directory: "Welcome", "To", "OS-2024"
+Writes specific messages to each of these files:
+"Welcome/Welcome": Writes the message "avital.harel\nIf you haven't read the exercises yet, read them now!".
+"Welcome/To": Writes the message "Start exercises early!".
+"Welcome/OS-2024": Writes the message "Good luck!".
+Closes each file after writing the message.
+Deletes the three files ("Welcome", "To", and "OS-2024") from the "Welcome" directory.
+Removes the "Welcome" directory.
+Exits the program with an exit status of 0.
+
+Q2:
+What We Can See in the Graph
+    The graph displays the memory access latency as a function of array size for both random and sequential access
+    patterns. The x-axis represents the memory size in bytes, and the y-axis represents the latency in nanoseconds.
+    Vertical lines indicate the sizes of different cache levels (L1d, L2, and L3) and the estimated page
+    table eviction threshold.
+    Results Compared to Expectations
+
+The results align with expectations based on how memory hierarchy and cache work:
+    L1d Cache: Low latency up to the size of the L1d cache (32 KiB). This is the fastest cache, so memory access is
+    quickest here.
+    L2 Cache: Slightly higher latency as the array size exceeds the L1d cache and accesses start hitting the
+    L2 cache (256 KiB).
+    L3 Cache: Further increase in latency as the array size exceeds the L2 cache and accesses start hitting the
+     L3 cache (6 MiB).
+    RAM: Significant jump in latency when the array size exceeds the L3 cache, indicating accesses are now going to RAM,
+     which is much slower.
+    Page Table Eviction: A noticeable spike in latency beyond the estimated threshold (192 MiB), due to page table
+    entries also missing the cache, causing double RAM accesses.
+
+Difference Between Random and Sequential Access Patterns
+    Random Access: Shows consistently higher latency compared to sequential access. This is because random access
+    patterns prevent effective use of the CPU's cache prefetching mechanisms, leading to more cache misses
+    and higher latencies.
+    Sequential Access: Exhibits lower latency, especially for larger array sizes, because sequential access allows the
+    CPU to prefetch data efficiently, resulting in fewer cache misses and faster memory access.
+
+Difference in Latency for Different Cache Levels
+    L1d Cache (32 KiB): Very low latency (~1 ns) as data is quickly accessible.
+    L2 Cache (256 KiB): Moderate latency (~3 ns), reflecting its larger size but slower speed compared to L1d.
+    L3 Cache (6 MiB): Higher latency (~10 ns), as it serves all cores and is larger but slower than L2.
+    RAM: Much higher latency (~50-100 ns), as accessing data from RAM is significantly slower than accessing from
+    any level of cache.
+
+Bonus:
+Between the L3 cache size and the estimated threshold:
+    After exceeding the L3 cache size (6 MiB), memory accesses start hitting the slower RAM instead of the cache.
+    This causes a noticeable increase in latency.
+
+After the estimated threshold:
+    Beyond the estimated threshold (192 MiB), page table entries also start missing the cache.
+    This means each memory access requires two RAM accesses: one for the page table and one for the data,
+    resulting in a significant increase in latency.
